@@ -1,13 +1,21 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {v4 as uuid} from "uuid";
+import {addPost} from "./actions";
+import {useDispatch} from "react-redux";
 
-
-function NewPostForm({addPost}) {
+/** 
+ *  NewPostForm: Component that calls dispatch to add new post
+ *   - Parent: Route
+ * */
+function NewPostForm({}) {
 
   const INITIAL_STATE = {title: "", description: "", body: ""}
   const [formData, setFormData] = useState({...INITIAL_STATE})
   const history = useHistory();
+
+  // Redux Dispatch
+  const dispatch = useDispatch();
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -23,7 +31,8 @@ function NewPostForm({addPost}) {
     const {name} = evt.target;
     if (name === "save") {
       let newPost = {...formData, id:uuid()}
-      addPost(newPost);
+      // addPost(newPost);
+      dispatch(addPost(newPost));
       history.push("/");
     } else {
       history.push("/");

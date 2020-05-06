@@ -1,15 +1,18 @@
 import React from "react";
 
-function CommentDetails({id, commentBody, removeComment}) {
-
-  const handleRemove = evt => {
-    removeComment(id);
+/**
+ * CommentDetails: Presentational component that is passed a handleDelete function to dispatch a delete comment action
+ *    - Parent: CommentList
+ */
+function CommentDetails({id, commentBody, handleDeleteComment}) {
+  const handleDelete = evt => {
+    handleDeleteComment(id);
   }
 
   return (
   <div>
     <p>{commentBody}</p>
-    <button onClick={handleRemove}>X</button>
+    <button onClick={handleDelete}>X</button>
   </div>);
 }
 

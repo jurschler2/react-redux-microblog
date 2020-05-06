@@ -1,39 +1,48 @@
-import React, {useState} from "react";
+import React from "react";
 import CommentDetails from "./CommentDetails";
 import NewCommentForm from "./NewCommentForm";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { addComment, deleteComment } from "./actions";
 
-function CommentList() {
+/**
+ * CommentList: Component that pulls state of comments from individual posts
+ *    - Parent: PostDetails
+ */
+function CommentList({ postId }) {
 
-  const [comments, setComments] = useState([]);
+  // To add a useSelector to get comments
+  const comments = useSelector(store => store.comments[postId], shallowEqual);
+  const dispatch = useDispatch();
 
-  const addComment = newComment => {
-    setComments([...comments, newComment])
+  const handleAddComment = (formData) => {
+    dispatch(addComment(postId, formData));
   }
 
-  const removeComment = commentId => {
-    let filteredComments = comments.filter(c => c.id !== commentId)
-    setComments([...filteredComments])
+  const handleDeleteComment = (commentId) => {
+    dispatch(deleteComment(postId, commentId));
   }
 
   const renderComments = () => {
-
-    return (comments.map(c=> <CommentDetails key={c.id} 
-                                             id={c.id} 
-                                             commentBody={c.commentBody} 
-                                             removeComment={removeComment}/>))
-
+    return (
+      Object.keys(comments).map(key => (
+        <CommentDetails key={comments[key].id}
+          id={comments[key].id}
+          commentBody={comments[key].commentBody}
+          handleDeleteComment={handleDeleteComment}
+        />
+      )))
   }
 
   return (
-  <div>
-   <b>Comments</b>
     <div>
-      {renderComments()}
-    </div>
-    <div>
-      <NewCommentForm addComment={addComment}/>
-    </div>
-  </div>);
+      <b>Comments</b>
+      <div>
+        {comments ? renderComments() : <p>No comments</p>}
+      </div>
+      <div>
+        <NewCommentForm handleAddComment={handleAddComment} />
+      </div>
+    </div>);
 }
 
 export default CommentList;

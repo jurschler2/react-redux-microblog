@@ -1,19 +1,16 @@
 state = {posts, comments}
 
 posts: {
-
           id: {
+            id,
             title,
             description,
             body
           }
-
 }
 
 comments: {
-
           post.id: {
-                      id: commentBody
+                    commentId: commentBody
           }
-
 }

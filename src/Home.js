@@ -1,17 +1,16 @@
 import React from "react";
 import PostList from "./PostList";
 
-function Home({posts}) {
-
-
-  // To remove the posts prop as redux will handle the posts inside of PostList.
+/**
+ * Home: Home Component
+ *    - Parent: Routes
+ */
+function Home() {
   return (
-  <div>
-    Home
-  <PostList posts={posts}/>
-  </div>
-    );
-
+    <div>
+      <PostList />
+    </div>
+  );
 }
 
 export default Home;

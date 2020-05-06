@@ -1,7 +1,9 @@
 import React from "react";
 import {NavLink} from "react-router-dom";
 
-// Renders a navbox with links to the home page and to the new post form.
+/** Renders a navbox with links to the home page and to the new post form.
+ *   - Parent: App
+ * */
 function NavBox() {
 
   return (

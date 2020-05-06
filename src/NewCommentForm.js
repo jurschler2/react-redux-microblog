@@ -1,7 +1,11 @@
 import React, {useState} from "react";
 import {v4 as uuid} from "uuid";
 
-function NewCommentForm({addComment}) {
+/** 
+ *  NewCommentForm: Component that takes in handleAddComment that will call action to add comment
+ *   - Parent: CommentList
+ * */
+function NewCommentForm({handleAddComment}) {
   const INITIAL_STATE = {commentBody: ""}
   const [formData, setFormData] = useState({...INITIAL_STATE})
 
@@ -12,10 +16,11 @@ function NewCommentForm({addComment}) {
       [name]: value,
     }));
   }
+  
   const handleSubmit = evt => {
     evt.preventDefault();
-    let newComment = {...formData, id:uuid()}
-    addComment(newComment)
+    let newComment = {...formData, id:uuid()};
+    handleAddComment(newComment);
     setFormData({...INITIAL_STATE});
   }
 
