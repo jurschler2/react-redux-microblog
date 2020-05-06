@@ -1,0 +1,19 @@
+state = {posts, comments}
+
+posts: {
+
+          id: {
+            title,
+            description,
+            body
+          }
+
+}
+
+comments: {
+
+          post.id: {
+                      id: commentBody
+          }
+
+}
