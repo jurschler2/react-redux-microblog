@@ -7,25 +7,25 @@ import { useSelector, shallowEqual } from "react-redux";
  *    - Parent: Home
  * */
 function PostList() {
-
-  // To add a useSelector to get all posts
-  const titles = useSelector(store => store.titles, shallowEqual)
-  
+  const titleIdToTitle = useSelector(store => store.titles, shallowEqual)
+  // const titles = useSelector(store => Object.values(store.titles), shallowEqual)  
 
   const renderTitleListHTML = () => {
-    return Object.keys(titles).map(key => (
-    <PostCard
-      key={titles[key].id}
-      id={titles[key].id}
-      title={titles[key].title}
-      description={titles[key].description}
-      votes={titles[key].votes} />
-  ))}
+    // ********* map over Object.values 
+    return Object.keys(titleIdToTitle).map(key => (
+      <PostCard
+        key={titleIdToTitle[key].id}
+        id={titleIdToTitle[key].id}
+        title={titleIdToTitle[key].title}
+        description={titleIdToTitle[key].description}
+        votes={titleIdToTitle[key].votes} />
+    ))
+  }
 
   return (
     <div>
       PostList
-      {Object.keys(titles).length > 0 ? renderTitleListHTML() : <p>LOADING</p>}
+      {Object.keys(titleIdToTitle).length > 0 ? renderTitleListHTML() : <p>No Posts</p>}
     </div>
   );
 

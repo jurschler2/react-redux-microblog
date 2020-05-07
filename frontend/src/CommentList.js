@@ -1,33 +1,33 @@
 import React from "react";
-import CommentDetails from "./CommentDetails";
+import CommentCard from "./CommentCard";
 import NewCommentForm from "./NewCommentForm";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { addComment, deleteComment } from "./actions";
+import { addSingleCommentFromAPI, deleteSingleCommentFromAPI } from "./actions";
 
 /**
  * CommentList: Component that pulls state of comments from individual posts
  *    - Parent: PostDetails
+ *    - Relationship: PostDetails => CommentList => CommentCard
  */
 function CommentList({ postId }) {
 
-  // To add a useSelector to get comments
-  const comments = useSelector(store => store.comments[postId], shallowEqual);
+  const comments = useSelector(store => store.posts[postId].comments, shallowEqual);
   const dispatch = useDispatch();
 
   const handleAddComment = (formData) => {
-    dispatch(addComment(postId, formData));
+    dispatch(addSingleCommentFromAPI(postId, formData));
   }
 
   const handleDeleteComment = (commentId) => {
-    dispatch(deleteComment(postId, commentId));
+    dispatch(deleteSingleCommentFromAPI(postId, commentId));
   }
 
   const renderComments = () => {
     return (
-      Object.keys(comments).map(key => (
-        <CommentDetails key={comments[key].id}
-          id={comments[key].id}
-          commentBody={comments[key].commentBody}
+      comments.map(c => (
+        <CommentCard key={c.id}
+          id={c.id}
+          text={c.text}
           handleDeleteComment={handleDeleteComment}
         />
       )))

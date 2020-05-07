@@ -1,6 +1,9 @@
 import axios from "axios";
 // Different action functions.
-import {ADD_POST, UPDATE_POST, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, LOAD_TITLES, LOAD_SINGLE_POST, SHOW_ERROR, ADD_TITLE } from "./actionTypes";
+import {ADD_POST, UPDATE_POST, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, LOAD_TITLES, 
+        LOAD_SINGLE_POST, SHOW_ERROR, ADD_TITLE, UPDATE_TITLE } from "./actionTypes";
+
+const BASE_URL = "http://localhost:5000/api/posts";
 
 export function addPost (formData) {
   return {
@@ -37,6 +40,13 @@ export function addTitle (newTitle) {
   }
 }
 
+export function updateTitle(updatedTitle) {
+  return {
+    type : UPDATE_TITLE,
+    updatedTitle: updatedTitle
+  }
+}
+
 export function loadSinglePosts (singlePost) {
   return {
     type: LOAD_SINGLE_POST,
@@ -67,44 +77,36 @@ export function showErr (errorSinglePost) {
   }
 }
 
+// API Call made inside Home
 export function getTitlesFromAPI() {
   return async function(dispatch) {
-    // dispatch(startLoad());
-
     try {
-      let res = await axios.get(
-          'http://localhost:5000/api/posts/');
+      let res = await axios.get(BASE_URL);
       // Convert the array received from the API into a nested object
       // for use within the frontend of the app.
 
       let titleIdsToTitles = {};
       res.data.forEach(t => titleIdsToTitles[t.id] = t);
-
       dispatch(loadTitles(titleIdsToTitles));
     }
 
     catch(err) {
-      // dispatch(showErr(err.response.data));
       console.log("you failed api title get");
     }
   }
 }
 
+// API Call made inside PostDetails
 export function getSinglePostFromAPI(id) {
   return async function(dispatch) {
-    // dispatch(startLoad());
-
     try {
       let res = await axios.get(
-          `http://localhost:5000/api/posts/${id}`);
-      // Convert the array received from the API into a nested object
-      // for use within the frontend of the app.
+          `${BASE_URL}/${id}`);
       let singlePost = res.data
       dispatch(loadSinglePosts(singlePost));
     }
 
     catch(err) {
-
       let errorSinglePost = err.response.data;
       dispatch(showErr(errorSinglePost));
       console.log("you failed api posts get");
@@ -112,23 +114,90 @@ export function getSinglePostFromAPI(id) {
   }
 }
 
+// API Call made inside NewPostForm
 export function addSinglePostFromAPI(formData) {
   return async function(dispatch) {
-    // dispatch(startLoad());
-
     try {
-      let res = await axios.post(
-          `http://localhost:5000/api/posts/`, formData);
+      let res = await axios.post(BASE_URL, formData);
 
-      // Convert the array received from the API into a nested object
-      // for use within the frontend of the app.
+      // Create new object without body (title has no body)
       let newTitle = {id: res.data.id, title: res.data.title, description: res.data.description}
       dispatch(addTitle(newTitle));
     }
 
     catch(err) {
-      // dispatch(showErr(err.response.data));
-      console.log("you failed api posts get");
+      console.log("you failed api post single post");
+    }
+  }
+}
+
+// API Call made inside PostDetails
+export function updatePostToAPI(formData) {
+  return async function(dispatch) {
+    try {
+      let res = await axios.put(
+          `${BASE_URL}/${formData.id}`, formData);
+
+      // Update title 
+      const {id, title, description} = res.data;
+      dispatch(updateTitle({id, title, description}));
+
+      // Update Post
+      dispatch(updatePost(res.data));
+    }
+
+    catch(err) {
+      console.log("you failed api posts to Update post");
+    }
+  }
+}
+
+// API Call made inside PostDetails
+export function DeletePostToAPI(postId) {
+  return async function(dispatch) {
+    try {
+      let res = await axios.delete(
+          `${BASE_URL}/${postId}`);
+
+      // Delete post from posts (DELETE_POST in rootReducer will also delete postId from titles state)
+      dispatch(deletePost(postId));
+    }
+
+    catch(err) {
+      console.log("you failed api posts to delete post");
+    }
+  }
+}
+
+// API Call made inside CommentList
+export function addSingleCommentFromAPI(postId, formData) {
+  return async function(dispatch) {
+    try {
+      let res = await axios.post(
+          `${BASE_URL}/${postId}/comments`, formData);
+
+      // {id: commentId, text: some text}
+      dispatch(addComment(postId, res.data));
+    }
+
+    catch(err) {
+      console.log("you failed api post to add comment");
+    }
+  }
+}
+
+// API Call made inside CommentList
+export function deleteSingleCommentFromAPI(postId, commentId) {
+  return async function(dispatch) {
+    try {
+      let res = await axios.delete(
+          `${BASE_URL}/${postId}/comments/${commentId}`);
+
+      dispatch(deleteComment(postId, commentId));
+    }
+
+    catch(err) {
+      console.log("you failed api delete a comment");
     }
   }
 }

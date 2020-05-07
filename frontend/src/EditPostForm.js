@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 /**
- * EditPostDetails: Component that is passed handleUpdatePost to dispatch action to update single post
+ * EditPostForm: Component that is passed handleUpdatePost to dispatch action to update single post
  *    - Parent: PostDetails
  */
-function EditPostDetails({ currentPost, handleUpdatePost, setShowEditForm }) {
+function EditPostForm({ currentPost, handleUpdatePost, setShowEditForm }) {
 
+  // ********* creating one form comp
   const INITIAL_STATE = currentPost;
   const [formData, setFormData] = useState({ ...INITIAL_STATE })
   const history = useHistory();
@@ -62,4 +63,4 @@ function EditPostDetails({ currentPost, handleUpdatePost, setShowEditForm }) {
 
 }
 
-export default EditPostDetails;
+export default EditPostForm;

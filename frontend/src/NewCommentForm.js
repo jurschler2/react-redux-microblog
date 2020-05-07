@@ -6,7 +6,7 @@ import {v4 as uuid} from "uuid";
  *   - Parent: CommentList
  * */
 function NewCommentForm({handleAddComment}) {
-  const INITIAL_STATE = {commentBody: ""}
+  const INITIAL_STATE = {text: ""}
   const [formData, setFormData] = useState({...INITIAL_STATE})
 
   const handleChange = evt => {
@@ -19,8 +19,7 @@ function NewCommentForm({handleAddComment}) {
   
   const handleSubmit = evt => {
     evt.preventDefault();
-    let newComment = {...formData, id:uuid()};
-    handleAddComment(newComment);
+    handleAddComment({...formData});
     setFormData({...INITIAL_STATE});
   }
 
@@ -28,10 +27,10 @@ function NewCommentForm({handleAddComment}) {
   <div>
       <form onSubmit={handleSubmit}>
         <input 
-          name="commentBody"
+          name="text"
           placeholder="New Comment"
           onChange={handleChange}
-          value={formData.commentBody}/>
+          value={formData.text}/>
         <button name="add">Add</button>
       </form>
   </div>);

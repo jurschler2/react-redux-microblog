@@ -1,9 +1,9 @@
-import React, {useState, useEffect} from "react";
-import {useParams, Redirect} from "react-router-dom";
-import EditPostDetails from "./EditPostDetails";
+import React, { useState, useEffect } from "react";
+import { useParams, Redirect } from "react-router-dom";
+import EditPostForm from "./EditPostForm";
 import CommentList from "./CommentList";
-import {useSelector, useDispatch, shallowEqual} from "react-redux";
-import {deletePost, updatePost, getSinglePostFromAPI} from "./actions";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
+import { getSinglePostFromAPI, updatePostToAPI, DeletePostToAPI } from "./actions";
 
 /** 
  *  PostDetails: Component that calls state of specific post
@@ -11,37 +11,23 @@ import {deletePost, updatePost, getSinglePostFromAPI} from "./actions";
  * */
 function PostDetails() {
 
-  const {postId} = useParams();
-
+  const { postId } = useParams();
   const dispatch = useDispatch();
+
+  // To add a useSelector to get specific post
+  const post = useSelector(store => store.posts[postId], shallowEqual);
+  const postToTitleObj = useSelector(store => store.titles[postId]);
 
   useEffect(
     function LoadSinglePostFromAPI() {
-      dispatch(getSinglePostFromAPI(postId));
+      // If post does not exist inside state, call API. 
+      if (!post) {
+        dispatch(getSinglePostFromAPI(postId))
+      }
     }, [dispatch]);
 
-  // To add a useSelector to get specific post
-  const post = useSelector(store => store.posts[postId], shallowEqual)
-  const error = useSelector(store => store.errors.postDetailError, shallowEqual)
-  
   // const postToDisplay = posts.filter(p => p.id === postId)[0];
   const [showEditForm, setShowEditForm] = useState(false);
-
-  if (error && !post) {
-    
-    return (
-      <div><h1>There was a problem loading this webpage, please try again later.</h1></div>
-      // <Redirect to="/"/>
-    );
-  }
-
-  // To revisit later:
-
-  // } else if (!post) {
-  //   return (
-  //   <Redirect to="/"/>
-  //   );
-  // }
 
 
   const handleClick = evt => {
@@ -49,38 +35,49 @@ function PostDetails() {
     setShowEditForm(true)
   }
 
-  const handleDeletePost = () => {
-    dispatch(deletePost(postId));
+  const handleDeletePost = evt => {
+    dispatch(DeletePostToAPI(postId));
   }
 
-  const handleUpdatePost = (formData) => {
-    dispatch(updatePost(formData));
+  const handleUpdatePost = (newPostForm) => {
+    dispatch(updatePostToAPI(newPostForm));
   }
 
   const renderPostDetails = () => {
     return (
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.description}</p>
-      <p>{post.body}</p>
-      <button className="edit-post-btn" onClick={handleClick}>Edit</button>
-      <button className="delete-post-btn" onClick={handleDeletePost}>Delete</button>
       <div>
-        <CommentList postId={postId}/>
+        <h1>{post.title}</h1>
+        <p>{post.description}</p>
+        <p>{post.body}</p>
+        <button className="edit-post-btn" onClick={handleClick}>Edit</button>
+        <button className="delete-post-btn" onClick={handleDeletePost}>Delete</button>
+        <div>
+          <CommentList postId={postId} />
+        </div>
       </div>
-    </div>
     );
   }
 
-  return (
-  <div>
-    {showEditForm 
-      ? <EditPostDetails currentPost={post} handleUpdatePost={handleUpdatePost} setShowEditForm={setShowEditForm}/>
-      : (post ? renderPostDetails() : <p>LOADING</p>)
+  // Checks if post exists in our backend by checking for postId inside of titles
+  // which already exists inside our redux state. If not, redirect to homepage. 
+  // This method breaks when you search for a specific post through searchbar (this
+  // method depends on homepage having loaded titles into redux first)
+  const renderPostState = () => {
+    if (postToTitleObj) {
+      return (post ? renderPostDetails() : <p>LOADING</p>)
+    } else {
+      return <Redirect to="/" />
     }
-  </div>
-  );
+  }
 
+  return (
+    <div>
+      {showEditForm
+        ? <EditPostForm currentPost={post} handleUpdatePost={handleUpdatePost} setShowEditForm={setShowEditForm} />
+        : renderPostState()
+      }
+    </div>
+  );
 }
 
 export default PostDetails;

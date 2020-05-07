@@ -11,6 +11,7 @@ function Home() {
 
   const dispatch = useDispatch();
 
+  // Load titles so that PostList has access to titles
   useEffect(
     function LoadTitlesFromAPI() {
       dispatch(getTitlesFromAPI());

@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
-import {v4 as uuid} from "uuid";
-import {addPost, addSinglePostFromAPI} from "./actions";
+import {addSinglePostFromAPI} from "./actions";
 import {useDispatch} from "react-redux";
 
 /** 
@@ -30,15 +29,12 @@ function NewPostForm({}) {
     evt.preventDefault();
     const {name} = evt.target;
     if (name === "save") {
-      let newPost = {...formData}
-      // addPost(newPost);
-      dispatch(addSinglePostFromAPI(newPost));
+      dispatch(addSinglePostFromAPI({...formData}));
       history.push("/");
     } else {
       history.push("/");
     }
   }
-
 
   return (
   <div>
@@ -67,7 +63,6 @@ function NewPostForm({}) {
         <button name="cancel" onClick={handleSubmit}>Cancel</button>
       </form>
   </div>);
-
 }
 
 export default NewPostForm;

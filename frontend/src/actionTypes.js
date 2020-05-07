@@ -9,6 +9,7 @@ export const DELETE_POST = "DELETE_POST";
 export const LOAD_TITLES = "LOAD_TITLES";
 export const LOAD_SINGLE_POST = "LOAD_SINGLE_POST";
 export const ADD_TITLE = "ADD_TITLE";
+export const UPDATE_TITLE = "UPDATE_TITLE";
 
 export const ADD_COMMENT = "ADD_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
