@@ -1,4 +1,4 @@
-import { ADD_POST, UPDATE_POST, DELETE_POST, ADD_COMMENT, DELETE_COMMENT } from "./actionTypes";
+import { ADD_POST, UPDATE_POST, DELETE_POST, LOAD_POSTS, ADD_COMMENT, DELETE_COMMENT } from "./actionTypes";
 
 
 // const INITIAL_STATE = {posts:{1: {id: 1, title: "hello world", description: "first post", body: "first body"}}, comments:{}}
@@ -25,6 +25,11 @@ function rootReducer(state = INITIAL_STATE, action) {
         posts: postsCopy,
         comments: commentsCopy
       }
+
+    // case LOAD_POSTS:
+    //   return {
+
+    //   }
 
     // case UPDATE_POST:
     //   // technically same code as ADD_POST

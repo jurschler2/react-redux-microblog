@@ -2,13 +2,20 @@ import React from 'react';
 import './App.css';
 import NavBox from "./NavBox";
 import Routes from "./Routes";
-import {BrowserRouter} from "react-router-dom";
-import {createStore} from "redux";
-import {Provider} from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import { createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
 import rootReducer from "./rootReducer";
+import thunk from "redux-thunk";
 
-const store = createStore(rootReducer, 
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+
+const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(thunk),
+    window.__REDUX_DEVTOOLS_EXTENSION__
+    && window.__REDUX_DEVTOOLS_EXTENSION__()
+  ))
 
 function App() {
   return (
