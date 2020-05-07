@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {useHistory} from "react-router-dom";
 import {v4 as uuid} from "uuid";
-import {addPost} from "./actions";
+import {addPost, addSinglePostFromAPI} from "./actions";
 import {useDispatch} from "react-redux";
 
 /** 
@@ -30,9 +30,9 @@ function NewPostForm({}) {
     evt.preventDefault();
     const {name} = evt.target;
     if (name === "save") {
-      let newPost = {...formData, id:uuid()}
+      let newPost = {...formData}
       // addPost(newPost);
-      dispatch(addPost(newPost));
+      dispatch(addSinglePostFromAPI(newPost));
       history.push("/");
     } else {
       history.push("/");

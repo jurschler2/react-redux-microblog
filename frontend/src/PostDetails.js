@@ -1,9 +1,9 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {useParams, Redirect} from "react-router-dom";
 import EditPostDetails from "./EditPostDetails";
 import CommentList from "./CommentList";
 import {useSelector, useDispatch, shallowEqual} from "react-redux";
-import {deletePost, updatePost} from "./actions";
+import {deletePost, updatePost, getSinglePostFromAPI} from "./actions";
 
 /** 
  *  PostDetails: Component that calls state of specific post
@@ -15,17 +15,34 @@ function PostDetails() {
 
   const dispatch = useDispatch();
 
+  useEffect(
+    function LoadSinglePostFromAPI() {
+      dispatch(getSinglePostFromAPI(postId));
+    }, [dispatch]);
+
   // To add a useSelector to get specific post
   const post = useSelector(store => store.posts[postId], shallowEqual)
+  const error = useSelector(store => store.errors.postDetailError, shallowEqual)
   
   // const postToDisplay = posts.filter(p => p.id === postId)[0];
   const [showEditForm, setShowEditForm] = useState(false);
 
-  if (!post) {
+  if (error && !post) {
+    
     return (
-      <Redirect to="/"/>
+      <div><h1>There was a problem loading this webpage, please try again later.</h1></div>
+      // <Redirect to="/"/>
     );
   }
+
+  // To revisit later:
+
+  // } else if (!post) {
+  //   return (
+  //   <Redirect to="/"/>
+  //   );
+  // }
+
 
   const handleClick = evt => {
     evt.preventDefault();
@@ -59,7 +76,7 @@ function PostDetails() {
   <div>
     {showEditForm 
       ? <EditPostDetails currentPost={post} handleUpdatePost={handleUpdatePost} setShowEditForm={setShowEditForm}/>
-      : renderPostDetails()
+      : (post ? renderPostDetails() : <p>LOADING</p>)
     }
   </div>
   );

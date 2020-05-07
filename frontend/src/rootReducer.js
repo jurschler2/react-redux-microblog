@@ -1,8 +1,8 @@
-import { ADD_POST, UPDATE_POST, DELETE_POST, LOAD_POSTS, ADD_COMMENT, DELETE_COMMENT } from "./actionTypes";
+import { ADD_POST, UPDATE_POST, DELETE_POST, LOAD_SINGLE_POST, LOAD_TITLES, ADD_COMMENT, DELETE_COMMENT, SHOW_ERROR, ADD_TITLE } from "./actionTypes";
 
 
 // const INITIAL_STATE = {posts:{1: {id: 1, title: "hello world", description: "first post", body: "first body"}}, comments:{}}
-const INITIAL_STATE = { posts: {}, comments: {} }
+const INITIAL_STATE = { posts: {}, comments: {}, titles: {}, errors:{} }
 
 function rootReducer(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -26,10 +26,29 @@ function rootReducer(state = INITIAL_STATE, action) {
         comments: commentsCopy
       }
 
-    // case LOAD_POSTS:
-    //   return {
+    case LOAD_TITLES:
+      return {
+        ...state,
+        titles: {...action.titles}
+      }
 
-    //   }
+    case LOAD_SINGLE_POST:
+      return {
+        ...state,
+        posts: {...state.posts, [action.singlePost.id]: {...action.singlePost}}
+      }
+
+    case ADD_TITLE:  
+    return {
+      ...state,
+      titles: {...state.titles, [action.newTitle.id]: {...action.newTitle}}
+    }
+
+    case SHOW_ERROR:
+      return {
+        ...state,
+        errors: {...state.errors, postDetailError: action.errorSinglePost.message}
+      }
 
     // case UPDATE_POST:
     //   // technically same code as ADD_POST
