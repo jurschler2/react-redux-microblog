@@ -10,111 +10,55 @@ import produce from "immer";
  */
 const INITIAL_STATE = { posts: {}, titles: {} }
 
-const immerRootReducer = produce((draft = INITIAL_STATE, action) => {
-  switch (action.type) {
-    case ADD_TITLE:
-      console.log("we are in the switch")
-      draft.titles[action.formData.id] = action.formData
-      
+const immerRootReducer = (state = INITIAL_STATE, action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case ADD_TITLE:
+        draft.titles[action.newTitle.id] = action.newTitle;
+        break;
 
+      case DELETE_POST:
+        delete draft.posts[action.postId];
+        // Remove title that has postId
+        delete draft.titles[action.postId];
+        break;
 
-  //   case DELETE_POST:
-  //     const postsCopy = { ...state.posts };
-  //     const titlesCopy = { ...state.titles };
+      case LOAD_TITLES:
+        draft.titles = action.titles;
+        break;
 
-  //     delete postsCopy[action.postId];
-  //     // Remove title that has postId
-  //     delete titlesCopy[action.postId];
+      case LOAD_SINGLE_POST:
+        draft.posts[action.singlePost.id] = { ...action.singlePost };
+        break;
 
-  //     return {
-  //       ...state,
-  //       posts: postsCopy,
-  //       titles: titlesCopy
-  //     }
+      case UPDATE_TITLE:
+        draft.titles[action.updatedTitle.id] = { ...action.updatedTitle };
+        break;
 
-  //   case LOAD_TITLES:
-  //     return {
-  //       ...state,
-  //       titles: { ...action.titles }
-  //     }
+      case UPDATE_POST:
+        // get back { id, title, description, body, votes } (missing comments)
+        draft.posts[action.formData.id] = { ...state.posts[action.formData.id], ...action.formData };
+        break;
 
-  //   case LOAD_SINGLE_POST:
-  //     return {
-  //       ...state,
-  //       posts: { ...state.posts, [action.singlePost.id]: { ...action.singlePost } }
-  //     }
+      case UPDATE_VOTE_COUNT:
+        if (state.posts[action.postId]) {
+          draft.posts[action.postId].votes = action.voteAmount;
+        }
+        draft.titles[action.postId].votes = action.voteAmount;
+        break;
 
-  //   case ADD_TITLE:
-  //     return {
-  //       ...state,
-  //       titles: { ...state.titles, [action.newTitle.id]: { ...action.newTitle } }
-  //     }
+      case ADD_COMMENT:
+        draft.posts[action.postId].comments.push({ ...action.formData });
+        break;
 
-  //   case UPDATE_TITLE:
-  //     return {
-  //       ...state,
-  //       titles: { ...state.titles, [action.updatedTitle.id]: { ...action.updatedTitle } }
-  //     }
+      case DELETE_COMMENT:
+        draft.posts[action.postId].comments =
+          state.posts[action.postId].comments.filter(c => c.id !== action.commentId);
+        break;
 
-  //   case UPDATE_VOTE_COUNT:
-
-  //     let copyPostsforVotes = {...state.posts}
-  //     // Check to see whether the post being voted on is already in redux posts state, if so need to update the post's votes attribute
-  //     // as well as the title's votes attribute below.
-  //     if (state.posts[action.postId]) {
-  //       copyPostsforVotes = {...state.posts, [action.postId]: {...state.posts[action.postId], votes: action.voteAmount}}
-  //     }
-  //     return {
-  //       ...state,
-  //       titles: {...state.titles, [action.postId]: {...state.titles[action.postId], votes: action.voteAmount}},
-  //       posts: {...copyPostsforVotes}
-  //     }  
-  
-
-  //   case UPDATE_POST:
-  //     // get back { id, title, description, body, votes } (missing comments)
-      
-  //     return {
-  //       ...state,
-  //       posts: {
-  //         ...state.posts,
-  //         [action.formData.id]: {
-  //           comments: [...state.posts[action.formData.id].comments],
-  //           ...action.formData
-  //         }
-  //       }
-  //     }
-
-  //   // ******* look at combining reducers in further studies
-  //   // ******* formData - give more specific name 
-  //   case ADD_COMMENT:
-  //     return {
-  //       ...state,
-  //       posts: {
-  //         ...state.posts,
-  //         [action.postId]: {
-  //           ...state.posts[action.postId],
-  //           comments: [...state.posts[action.postId].comments, { ...action.formData }]
-  //         }
-  //       }
-  //     }
-
-  //   case DELETE_COMMENT:
-  //     const postsForPostCopy = {
-  //       ...state.posts,
-  //       [action.postId]: {
-  //         ...state.posts[action.postId],
-  //         comments: state.posts[action.postId].comments.filter(c => c.id !== action.commentId)
-  //       }
-  //     };
-  //     return {
-  //       ...state,
-  //       posts: postsForPostCopy
-  //     }
-
-    default:
-      return draft;
-  }
-});
+      default:
+        return draft;
+    }
+  });
 
 export default immerRootReducer

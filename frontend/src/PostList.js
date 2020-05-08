@@ -9,26 +9,26 @@ import { voteFromAPI } from "./actions";
  *    - Parent: Home
  * */
 function PostList() {
-  // const titles = useSelector(store => Object.values(store.titles), shallowEqual) 
+  const titles = useSelector(store => Object.values(store.titles), shallowEqual) 
   const dispatch = useDispatch();
 
   const handleVote = (postId, voteType) => {
     dispatch(voteFromAPI(postId, voteType));
   }
 
-  // const renderTitleListHTML = () => {
-  //   return titles
-  //     .sort((a, b) => b.votes - a.votes)
-  //     .map(p => (
-  //       <PostCard
-  //         handleVote={handleVote}
-  //         key={p.id}
-  //         id={p.id}
-  //         title={p.title}
-  //         description={p.description}
-  //         votes={p.votes} />
-  //     ))
-  // }
+  const renderTitleListHTML = () => {
+    return titles
+      .sort((a, b) => b.votes - a.votes)
+      .map(p => (
+        <PostCard
+          handleVote={handleVote}
+          key={p.id}
+          id={p.id}
+          title={p.title}
+          description={p.description}
+          votes={p.votes} />
+      ))
+  }
 
   return (
     <div className="posts-list">
@@ -36,7 +36,7 @@ function PostList() {
         Welcome to <strong>Microblog</strong>, our innovative site for communicating on the information superhighway
       </div>
       <div className="posts">
-        {/* {titles.length > 0 ? renderTitleListHTML() : <p>No Posts</p>} */}
+        {titles.length > 0 ? renderTitleListHTML() : <p>No Posts</p>}
       </div>
     </div>
   );
