@@ -1,6 +1,7 @@
 import React from "react";
 import CommentCard from "./CommentCard";
 import NewCommentForm from "./NewCommentForm";
+import "./CommentList.css";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { addSingleCommentFromAPI, deleteSingleCommentFromAPI } from "./actions";
 
@@ -34,12 +35,13 @@ function CommentList({ postId }) {
   }
 
   return (
-    <div>
-      <b>Comments</b>
-      <div>
+    <div className="comment-details">
+      <hr className="comment-line"></hr>
+      <b className="comment-title">Comments</b>
+      <div className="comments">
         {comments ? renderComments() : <p>No comments</p>}
       </div>
-      <div>
+      <div className="new-comment-form-parent">
         <NewCommentForm handleAddComment={handleAddComment} />
       </div>
     </div>);

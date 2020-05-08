@@ -1,13 +1,12 @@
-import React, {useState} from "react";
-import {v4 as uuid} from "uuid";
-
+import React, { useState } from "react";
+import "./NewCommentForm.css";
 /** 
  *  NewCommentForm: Component that takes in handleAddComment that will call action to add comment
  *   - Parent: CommentList
  * */
-function NewCommentForm({handleAddComment}) {
-  const INITIAL_STATE = {text: ""}
-  const [formData, setFormData] = useState({...INITIAL_STATE})
+function NewCommentForm({ handleAddComment }) {
+  const INITIAL_STATE = { text: "" }
+  const [formData, setFormData] = useState({ ...INITIAL_STATE })
 
   const handleChange = evt => {
     const { name, value } = evt.target;
@@ -16,24 +15,25 @@ function NewCommentForm({handleAddComment}) {
       [name]: value,
     }));
   }
-  
+
   const handleSubmit = evt => {
     evt.preventDefault();
-    handleAddComment({...formData});
-    setFormData({...INITIAL_STATE});
+    handleAddComment({ ...formData });
+    setFormData({ ...INITIAL_STATE });
   }
 
   return (
-  <div>
-      <form onSubmit={handleSubmit}>
-        <input 
+    <div className="new-comment-block">
+      <form onSubmit={handleSubmit} className="new-comment-form">
+        <input
           name="text"
           placeholder="New Comment"
           onChange={handleChange}
-          value={formData.text}/>
-        <button name="add">Add</button>
+          value={formData.text}
+          className="new-comment-input" />
+        <button name="add" className="new-comment-button">Add</button>
       </form>
-  </div>);
+    </div>);
 
 }
 

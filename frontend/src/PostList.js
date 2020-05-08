@@ -1,6 +1,7 @@
 import React from "react";
 import PostCard from "./PostCard";
 import { useSelector, shallowEqual } from "react-redux";
+import "./PostList.css";
 
 /** 
  *  PostList: Component that calls state of all titles
@@ -23,9 +24,13 @@ function PostList() {
   }
 
   return (
-    <div>
-      PostList
-      {Object.keys(titleIdToTitle).length > 0 ? renderTitleListHTML() : <p>No Posts</p>}
+    <div className="posts-list">
+      <div className="posts-tagline">
+        Welcome to <strong>Microblog</strong>, our innovative site for communicating on the information superhighway
+      </div>
+      <div className="posts">
+        {Object.keys(titleIdToTitle).length > 0 ? renderTitleListHTML() : <p>No Posts</p>}
+      </div>
     </div>
   );
 

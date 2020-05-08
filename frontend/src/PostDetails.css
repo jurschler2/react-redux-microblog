@@ -1,0 +1,39 @@
+.post-details-page {
+  width: 520px;
+}
+
+.post-detail {
+  width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.post-headers {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.post-title {
+  font-weight: bold;
+  font-size: 30px;
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.post-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.post-description {
+  font-style: italic;
+  margin: 0;
+}
+
+.comment-list {
+  width: 100%;
+}

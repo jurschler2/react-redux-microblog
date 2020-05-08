@@ -1,4 +1,5 @@
 import React from "react";
+import "./CommentCard.css";
 
 /**
  * CommentCard: Presentational component that is passed a handleDelete function 
@@ -10,9 +11,9 @@ function CommentCard({id, text, handleDeleteComment}) {
     handleDeleteComment(id);
   }
   return (
-  <div>
-    <p>{text}</p>
-    <button onClick={handleDelete}>X</button>
+  <div className="comment-card">
+    <button onClick={handleDelete} className="comment-delete-button">X</button>
+    <p className="comment-text">{text}</p>
   </div>);
 }
 

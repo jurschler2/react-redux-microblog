@@ -1,0 +1,16 @@
+.comment-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.comment-text {
+  margin: 15px 10px 10px 0;
+  text-align: left;
+}
+
+.comment-delete-button {
+  margin-right: 10px;
+  height: 25x;
+  width: 25px;
+}

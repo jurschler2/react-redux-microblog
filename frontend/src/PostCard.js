@@ -1,4 +1,5 @@
 import React from "react";
+import "./PostCard.css";
 import { Link } from "react-router-dom";
 
 
@@ -10,9 +11,11 @@ function PostCard({ id, title, description, votes }) {
 
   return (
     <div className="postcard">
-      <Link to={`/${id}`}><h3>{title}</h3></Link>
-      <h4><i>{description}</i></h4>
-      <h5>{votes}</h5>
+      <Link to={`/${id}`} className="postcard-link">
+        <h3 className="postcard-title">{title}</h3>
+      </Link>
+      <h4 className="postcard-description"><i>{description}</i></h4>
+      <h5>Votes: {votes}</h5>
     </div>
   );
 

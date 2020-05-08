@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import "./EditPostForm.css";
 
 /**
  * EditPostForm: Component that is passed handleUpdatePost to dispatch action to update single post
@@ -19,7 +20,7 @@ function EditPostForm({ currentPost, handleUpdatePost, setShowEditForm }) {
       [name]: value,
     }));
   }
-  
+
   // To add a dispatch into the submission.
   const handleSubmit = evt => {
     evt.preventDefault();
@@ -33,30 +34,29 @@ function EditPostForm({ currentPost, handleUpdatePost, setShowEditForm }) {
   }
 
   return (
-    <div>
-      <h1>Edit Post</h1>
-      <form>
+    <div className="post-form">
+      <h1 className="post-form-title">Edit Post</h1>
+      <form className="post-form-form">
         <label htmlFor="title">Title:</label>
         <input
           name="title"
           onChange={handleChange}
           value={formData.title} />
-        <br />
         <label htmlFor="description">Description:</label>
         <input
           name="description"
           onChange={handleChange}
           value={formData.description} />
-        <br />
         <label htmlFor="body">Body:</label>
-        <input
+        <textarea
           name="body"
           type="textarea"
           onChange={handleChange}
           value={formData.body} />
-        <br />
-        <button name="save" onClick={handleSubmit}>Save</button>
-        <button name="cancel" onClick={handleSubmit}>Cancel</button>
+        <div className="form-buttons">
+          <button name="save" onClick={handleSubmit} className="post-save-button">Save</button>
+          <button name="cancel" onClick={handleSubmit} className="post-cancel-button">Cancel</button>
+        </div>
       </form>
     </div>
   );

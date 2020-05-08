@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Redirect } from "react-router-dom";
 import EditPostForm from "./EditPostForm";
 import CommentList from "./CommentList";
+import "./PostDetails.css";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { getSinglePostFromAPI, updatePostToAPI, DeletePostToAPI } from "./actions";
 
@@ -45,13 +46,17 @@ function PostDetails() {
 
   const renderPostDetails = () => {
     return (
-      <div>
-        <h1>{post.title}</h1>
-        <p>{post.description}</p>
-        <p>{post.body}</p>
-        <button className="edit-post-btn" onClick={handleClick}>Edit</button>
-        <button className="delete-post-btn" onClick={handleDeletePost}>Delete</button>
-        <div>
+      <div className="post-detail">
+        <div className="post-headers">
+          <h1 className="post-title">{post.title}</h1>
+          <div className="post-buttons">
+            <button className="edit-post-btn" onClick={handleClick}>Edit</button>
+            <button className="delete-post-btn" onClick={handleDeletePost}>Delete</button>
+          </div>
+        </div>
+        <p className="post-description">{post.description}</p>
+        <p className="post-body">{post.body}</p>
+        <div className="comment-list">
           <CommentList postId={postId} />
         </div>
       </div>
@@ -71,7 +76,7 @@ function PostDetails() {
   }
 
   return (
-    <div>
+    <div className="post-details-page">
       {showEditForm
         ? <EditPostForm currentPost={post} handleUpdatePost={handleUpdatePost} setShowEditForm={setShowEditForm} />
         : renderPostState()

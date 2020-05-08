@@ -1,16 +1,17 @@
-import React, {useState} from "react";
-import {useHistory} from "react-router-dom";
-import {addSinglePostFromAPI} from "./actions";
-import {useDispatch} from "react-redux";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+import { addSinglePostFromAPI } from "./actions";
+import { useDispatch } from "react-redux";
+import "./NewPostForm.css";
 
 /** 
  *  NewPostForm: Component that calls dispatch to add new post
  *   - Parent: Route
  * */
-function NewPostForm({}) {
+function NewPostForm({ }) {
 
-  const INITIAL_STATE = {title: "", description: "", body: ""}
-  const [formData, setFormData] = useState({...INITIAL_STATE})
+  const INITIAL_STATE = { title: "", description: "", body: "" }
+  const [formData, setFormData] = useState({ ...INITIAL_STATE })
   const history = useHistory();
 
   // Redux Dispatch
@@ -27,9 +28,9 @@ function NewPostForm({}) {
   // To add a dispatch in the submission.
   const handleSubmit = evt => {
     evt.preventDefault();
-    const {name} = evt.target;
+    const { name } = evt.target;
     if (name === "save") {
-      dispatch(addSinglePostFromAPI({...formData}));
+      dispatch(addSinglePostFromAPI({ ...formData }));
       history.push("/");
     } else {
       history.push("/");
@@ -37,32 +38,31 @@ function NewPostForm({}) {
   }
 
   return (
-  <div>
-    <h1>New Post</h1>
-      <form>
+    <div className="post-form">
+      <h1 className="post-form-title">New Post</h1>
+      <form className="post-form-form">
         <label htmlFor="title">Title:</label>
-        <input 
+        <input
           name="title"
           onChange={handleChange}
-          value={formData.title}/>
-        <br/>  
+          value={formData.title} />
         <label htmlFor="description">Description:</label>
-        <input 
+        <input
           name="description"
           onChange={handleChange}
-          value={formData.description}/>
-        <br/>  
+          value={formData.description} />
         <label htmlFor="body">Body:</label>
-        <input 
+        <textarea
           name="body"
           type="textarea"
           onChange={handleChange}
-          value={formData.body}/>
-        <br/>  
-        <button name="save" onClick={handleSubmit}>Save</button>
-        <button name="cancel" onClick={handleSubmit}>Cancel</button>
+          value={formData.body} />
+        <div className="form-buttons">
+          <button name="save" onClick={handleSubmit} className="post-save-button">Save</button>
+          <button name="cancel" onClick={handleSubmit} className="post-cancel-button">Cancel</button>
+        </div>
       </form>
-  </div>);
+    </div>);
 }
 
 export default NewPostForm;
