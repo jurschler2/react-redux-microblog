@@ -1,6 +1,6 @@
 import {
   ADD_POST, UPDATE_POST, DELETE_POST, LOAD_SINGLE_POST,
-  LOAD_TITLES, ADD_COMMENT, DELETE_COMMENT, ADD_TITLE, UPDATE_TITLE
+  LOAD_TITLES, ADD_COMMENT, DELETE_COMMENT, ADD_TITLE, UPDATE_TITLE, UPDATE_VOTE_COUNT,
 } from "./actionTypes";
 
 /**
@@ -55,9 +55,24 @@ function rootReducer(state = INITIAL_STATE, action) {
         titles: { ...state.titles, [action.updatedTitle.id]: { ...action.updatedTitle } }
       }
 
+    case UPDATE_VOTE_COUNT:
+
+      let copyPostsforVotes = {...state.posts}
+      // Check to see whether the post being voted on is already in redux posts state, if so need to update the post's votes attribute
+      // as well as the title's votes attribute below.
+      if (state.posts[action.postId]) {
+        copyPostsforVotes = {...state.posts, [action.postId]: {...state.posts[action.postId], votes: action.voteAmount}}
+      }
+      return {
+        ...state,
+        titles: {...state.titles, [action.postId]: {...state.titles[action.postId], votes: action.voteAmount}},
+        posts: {...copyPostsforVotes}
+      }  
+  
+
     case UPDATE_POST:
       // get back { id, title, description, body, votes } (missing comments)
-      console.log("inside update_post, formdata is: ", action.formData);
+      
       return {
         ...state,
         posts: {

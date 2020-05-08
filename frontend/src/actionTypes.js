@@ -14,3 +14,6 @@ export const UPDATE_TITLE = "UPDATE_TITLE";
 export const ADD_COMMENT = "ADD_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const SHOW_ERROR = "SHOW_ERROR";
+
+export const UPDATE_VOTE_COUNT = "UPDATE_VOTE_COUNT";
+

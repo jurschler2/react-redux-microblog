@@ -1,27 +1,34 @@
 import React from "react";
 import PostCard from "./PostCard";
-import { useSelector, shallowEqual } from "react-redux";
+import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import "./PostList.css";
+import { voteFromAPI } from "./actions";
 
 /** 
  *  PostList: Component that calls state of all titles
  *    - Parent: Home
  * */
 function PostList() {
-  const titleIdToTitle = useSelector(store => store.titles, shallowEqual)
-  // const titles = useSelector(store => Object.values(store.titles), shallowEqual)  
+  // const titles = useSelector(store => Object.values(store.titles), shallowEqual) 
+  const dispatch = useDispatch();
 
-  const renderTitleListHTML = () => {
-    // ********* map over Object.values 
-    return Object.keys(titleIdToTitle).map(key => (
-      <PostCard
-        key={titleIdToTitle[key].id}
-        id={titleIdToTitle[key].id}
-        title={titleIdToTitle[key].title}
-        description={titleIdToTitle[key].description}
-        votes={titleIdToTitle[key].votes} />
-    ))
+  const handleVote = (postId, voteType) => {
+    dispatch(voteFromAPI(postId, voteType));
   }
+
+  // const renderTitleListHTML = () => {
+  //   return titles
+  //     .sort((a, b) => b.votes - a.votes)
+  //     .map(p => (
+  //       <PostCard
+  //         handleVote={handleVote}
+  //         key={p.id}
+  //         id={p.id}
+  //         title={p.title}
+  //         description={p.description}
+  //         votes={p.votes} />
+  //     ))
+  // }
 
   return (
     <div className="posts-list">
@@ -29,7 +36,7 @@ function PostList() {
         Welcome to <strong>Microblog</strong>, our innovative site for communicating on the information superhighway
       </div>
       <div className="posts">
-        {Object.keys(titleIdToTitle).length > 0 ? renderTitleListHTML() : <p>No Posts</p>}
+        {/* {titles.length > 0 ? renderTitleListHTML() : <p>No Posts</p>} */}
       </div>
     </div>
   );

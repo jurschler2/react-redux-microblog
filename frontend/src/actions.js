@@ -1,7 +1,7 @@
 import axios from "axios";
 // Different action functions.
 import {ADD_POST, UPDATE_POST, DELETE_POST, ADD_COMMENT, DELETE_COMMENT, LOAD_TITLES, 
-        LOAD_SINGLE_POST, SHOW_ERROR, ADD_TITLE, UPDATE_TITLE } from "./actionTypes";
+        LOAD_SINGLE_POST, SHOW_ERROR, ADD_TITLE, UPDATE_TITLE, UPDATE_VOTE_COUNT} from "./actionTypes";
 
 const BASE_URL = "http://localhost:5000/api/posts";
 
@@ -69,6 +69,15 @@ export function deleteComment (postId, commentId) {
     commentId: commentId
   }
 }
+
+export function voteOnPost (postId, voteAmount) {
+  return {
+    type: UPDATE_VOTE_COUNT,
+    postId: postId,
+    voteAmount: voteAmount
+  }
+}
+
 
 export function showErr (errorSinglePost) {
   return {
@@ -198,6 +207,21 @@ export function deleteSingleCommentFromAPI(postId, commentId) {
 
     catch(err) {
       console.log("you failed api delete a comment");
+    }
+  }
+}
+
+// API Call made from either PostList or PostDetails to update the vote count for a specific post by postId.
+// voteType is a string of either 'up' or 'down'
+export function voteFromAPI(postId, voteType) {
+  return async function(dispatch) {
+    try {
+      let res = await axios.post(
+          `${BASE_URL}/${postId}/vote/${voteType}`);
+      dispatch(voteOnPost(postId, res.data.votes));
+    }
+    catch(err) {
+      console.log("you failed api voting a post");
     }
   }
 }

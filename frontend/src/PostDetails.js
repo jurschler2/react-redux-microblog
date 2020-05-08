@@ -4,7 +4,7 @@ import EditPostForm from "./EditPostForm";
 import CommentList from "./CommentList";
 import "./PostDetails.css";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { getSinglePostFromAPI, updatePostToAPI, DeletePostToAPI } from "./actions";
+import { getSinglePostFromAPI, updatePostToAPI, DeletePostToAPI, voteFromAPI } from "./actions";
 
 /** 
  *  PostDetails: Component that calls state of specific post
@@ -36,12 +36,20 @@ function PostDetails() {
     setShowEditForm(true)
   }
 
+  // To change the name of DeletePostToAPI to be lowercase at the start
   const handleDeletePost = evt => {
     dispatch(DeletePostToAPI(postId));
   }
 
   const handleUpdatePost = (newPostForm) => {
     dispatch(updatePostToAPI(newPostForm));
+  }
+
+  const handleVoteClick = evt => {
+    evt.preventDefault();
+    // voteType will be either a string of 'up' or 'down'
+    const voteType = evt.target.name;
+    dispatch(voteFromAPI(postId, voteType));
   }
 
   const renderPostDetails = () => {
@@ -52,6 +60,11 @@ function PostDetails() {
           <div className="post-buttons">
             <button className="edit-post-btn" onClick={handleClick}>Edit</button>
             <button className="delete-post-btn" onClick={handleDeletePost}>Delete</button>
+          </div>
+          <div>
+            <p>Votes: {post.votes}</p>
+            <button name="up" onClick={handleVoteClick}>Upvote</button>
+            <button name="down" onClick={handleVoteClick}>Downvote</button>
           </div>
         </div>
         <p className="post-description">{post.description}</p>

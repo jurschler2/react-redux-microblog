@@ -6,10 +6,11 @@ import { BrowserRouter } from "react-router-dom";
 import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./rootReducer";
+import immerRootReducer from "./immerRootReducer";
 import thunk from "redux-thunk";
 
 const store = createStore(
-  rootReducer,
+  immerRootReducer,
   compose(
     applyMiddleware(thunk),
     window.__REDUX_DEVTOOLS_EXTENSION__
